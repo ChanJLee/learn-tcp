@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
 
     int len = 0;
     char buffer[256] = "what fuck\n";
-    std::cout << "write len" << write(fd, buffer, strlen(buffer)) << std::endl;
+    std::cout << "write len: " << write(fd, buffer, strlen(buffer)) << std::endl;
     while((len = read(fd, buffer, sizeof(buffer) - 1)) > 0) {
         buffer[len] = '\0';
         std::cout << buffer;
