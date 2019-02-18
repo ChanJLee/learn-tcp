@@ -6,11 +6,16 @@
 #include <cstring>
 
 int handle_request(int fd) {
-	std::cout << "handle request: " << std::endl;	
+	std::cout << "handle request" << std::endl;	
 	char buffer[256];
-	int len;
+	int len = 0;
 	while((len = read(fd, buffer, sizeof(buffer))) > 0) {
+		std::cout << "read len: " << len << std::endl;
 		write(fd, buffer, len);
+		if (buffer[len - 1] == '\n') {
+			std::cout << "end" << std::endl;
+			break;
+		} 
 	}
 	return 0;
 }
@@ -27,8 +32,7 @@ int main(int argc, char* argv[])
 	sockaddr_in server_sockaddr, client_sockaddr;
 	memset(&server_sockaddr, 0, sizeof(sockaddr_in));
 	memset(&client_sockaddr, 0, sizeof(sockaddr_in));
-
-
+	
 	int port = 9527;
 	server_sockaddr.sin_family = AF_INET;
 	server_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -45,6 +49,7 @@ int main(int argc, char* argv[])
 
 	std::cout << "start success, port: " << port << std::endl;
 	while(true) {
+		std::cout << "try to accept" << std::endl;
 		socklen_t client_sockaddr_len;
 		int client_fd = accept(server_fd, (sockaddr*) (&client_sockaddr), &client_sockaddr_len);
 		std::cout << "accepted: " << client_fd << std::endl;
